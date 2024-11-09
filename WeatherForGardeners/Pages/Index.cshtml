@@ -23,17 +23,17 @@
         // Загружаем границы для всей России
         ymaps.borders.load('RU', {
             lang: 'ru',
-            quality: 1 // Уровень детализации
+            quality: 3 // Уровень детализации
         }).then(function (result) {
             // Перебираем регионы и добавляем их на карту
             result.features.forEach(function (feature) {
                 var regionPolygon = new ymaps.Polygon(feature.geometry.coordinates, {
                     hintContent: feature.properties.name
                 }, {
-                    fillColor: '#6699ff',
-                    strokeColor: '#0000ff',
-                    strokeWidth: 2,
-                    opacity: 0.5
+                    fillColor: 'rgba(220, 220, 220, 0.6)', // Светло-серый цвет с 60% прозрачности
+                    strokeColor: '#aaaaaa', // Светло-серый цвет обводки
+                    strokeWidth: 1.5, // Уменьшенная толщина обводки
+                    opacity: 0.6 // Общая прозрачность полигона
                 });
 
                 // Добавляем полигон региона на карту
@@ -52,4 +52,5 @@
             console.error('Ошибка загрузки границ:', error);
         });
     }
+
 </script>
