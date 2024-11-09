@@ -1,0 +1,52 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Карта с регионами";
+}
+
+<h2>Выберите точку на карте</h2>
+
+<div id="map" style="width: 600px; height: 400px;"></div>
+
+<script src="https://api-maps.yandex.ru/2.1/?apikey=96433db7-2018-4d0d-840c-7a7b3b37ef63&lang=ru_RU"></script>
+
+
+<script>
+    ymaps.ready(init);
+
+    function init() {
+        // Создаем карту
+        var map = new ymaps.Map("map", {
+            center: [55.751574, 37.573856], // Центр России
+            zoom: 5
+        });
+
+        // Загружаем границы для всей России
+        ymaps.borders.load('RU', {
+            lang: 'ru',
+            quality: 1 // Увеличиваем уровень детализации
+        }).then(function (result) {
+            // Перебираем районы и добавляем их на карту
+            result.features.forEach(function (feature) {
+                var regionPolygon = new ymaps.Polygon(feature.geometry.coordinates, {
+                    hintContent: feature.properties.name
+                }, {
+                    fillColor: '#6699ff',
+                    strokeColor: '#0000ff',
+                    strokeWidth: 2,
+                    opacity: 0.5
+                });
+
+                map.geoObjects.add(regionPolygon);
+
+                // Обработчик клика по району
+                regionPolygon.events.add('click', function () {
+                    alert('Вы выбрали район: ' + feature.properties.name);
+                });
+            });
+        }).catch(function (error) {
+            console.error('Ошибка загрузки границ:', error);
+        });
+    }
+</script>
+
