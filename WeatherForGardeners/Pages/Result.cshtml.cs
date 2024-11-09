@@ -7,11 +7,14 @@ namespace WeatherForGardeners.Pages
     {
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public string Region { get; set; }
 
-        public void OnGet(double lat, double lon)
+        public void OnGet(double lat, double lon, string region)
         {
             Latitude = lat;
             Longitude = lon;
+            Region = region;
         }
     }
+
 }

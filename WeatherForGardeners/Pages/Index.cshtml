@@ -1,15 +1,14 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Карта с регионами";
+    ViewData["Title"] = "Карта с регионами и координатами";
 }
 
-<h2>Выберите точку на карте</h2>
+<h2>Выберите регион на карте</h2>
 
 <div id="map" style="width: 600px; height: 400px;"></div>
 
 <script src="https://api-maps.yandex.ru/2.1/?apikey=96433db7-2018-4d0d-840c-7a7b3b37ef63&lang=ru_RU"></script>
-
 
 <script>
     ymaps.ready(init);
@@ -24,9 +23,9 @@
         // Загружаем границы для всей России
         ymaps.borders.load('RU', {
             lang: 'ru',
-            quality: 1 // Увеличиваем уровень детализации
+            quality: 1 // Уровень детализации
         }).then(function (result) {
-            // Перебираем районы и добавляем их на карту
+            // Перебираем регионы и добавляем их на карту
             result.features.forEach(function (feature) {
                 var regionPolygon = new ymaps.Polygon(feature.geometry.coordinates, {
                     hintContent: feature.properties.name
@@ -37,11 +36,16 @@
                     opacity: 0.5
                 });
 
+                // Добавляем полигон региона на карту
                 map.geoObjects.add(regionPolygon);
 
-                // Обработчик клика по району
-                regionPolygon.events.add('click', function () {
-                    alert('Вы выбрали район: ' + feature.properties.name);
+                // Обработчик клика по региону
+                regionPolygon.events.add('click', function (e) {
+                    var coords = e.get('coords');
+                    var regionName = feature.properties.name;
+
+                    // Перенаправление на другую страницу с передачей координат и названия региона через URL
+                    window.location.href = '/Result?lat=' + coords[0] + '&lon=' + coords[1] + '&region=' + encodeURIComponent(regionName);
                 });
             });
         }).catch(function (error) {
@@ -49,4 +53,3 @@
         });
     }
 </script>
-
