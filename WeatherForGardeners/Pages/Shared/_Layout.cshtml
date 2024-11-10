@@ -10,7 +10,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-page="/Index">WeatherForGardeners</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -30,10 +30,20 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+
+    <div class="container-fluid">
+        <div class="content-wrapper">
+            <!-- Основной контент -->
+            <main role="main" class="main-content">
+                @RenderBody()
+            </main>
+
+            <!-- Боковая панель -->
+            <aside class="sidebar" id="sidebar">
+                <button id="toggleSidebar">Новости</button>
+                @await Html.PartialAsync("_Sidebar")
+            </aside>
+        </div>
     </div>
 
     <footer class="border-top footer text-muted">
@@ -47,5 +57,63 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+
+    <style>
+        .container-fluid {
+            max-width: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        .content-wrapper {
+            display: flex;
+            width: 100%;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .main-content {
+            width: 80%; /* Основная ширина, уменьшена для новой боковой панели */
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-sizing: border-box;
+            overflow-x: auto;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar {
+            width: 20%; /* Изначально занимает 15% */
+            background-color: rgba(144, 238, 144, 0.3);
+            padding: 20px;
+            border-left: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            z-index: 1;
+        }
+
+            /* Расширенная боковая панель, которая перекрывает основной контент */
+            .sidebar.expanded {
+                width: 100%;
+                position: absolute;
+                right: 0;
+                top: 0;
+                height: 100%;
+                background-color: rgba(144, 238, 144, 0.95); /* Более плотный фон при расширении */
+                z-index: 10;
+            }
+    </style>
+
+    <script>
+        document.getElementById("toggleSidebar").addEventListener("click", function () {
+            var sidebar = document.getElementById("sidebar");
+            sidebar.classList.toggle("expanded");
+        });
+    </script>
 </body>
 </html>
