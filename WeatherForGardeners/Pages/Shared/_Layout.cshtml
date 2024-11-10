@@ -40,8 +40,19 @@
 
             <!-- Боковая панель -->
             <aside class="sidebar" id="sidebar">
-                <button id="toggleSidebar">Новости</button>
-                @await Html.PartialAsync("_Sidebar")
+                <div class="tabs">
+                    <button class="tab-button" onclick="toggleTabContent('weather')">Погода</button>
+                    <div class="tab-content" id="weather-content">
+                        <h3>Погода</h3>
+                        @await Html.PartialAsync("_Weather")
+                    </div>
+
+                    <button class="tab-button" onclick="toggleTabContent('calendar')">Календарь</button>
+                    <div class="tab-content" id="calendar-content">
+                        <h3>Календарь</h3>
+                        @await Html.PartialAsync("_Calendar")
+                    </div>
+                </div>
             </aside>
         </div>
     </div>
@@ -73,7 +84,7 @@
         }
 
         .main-content {
-            width: 80%; /* Основная ширина, уменьшена для новой боковой панели */
+            width: 85%;
             padding: 20px;
             background-color: #f9f9f9;
             border-radius: 8px;
@@ -83,36 +94,110 @@
         }
 
         .sidebar {
-            width: 20%; /* Изначально занимает 15% */
+            width: 15%;
             background-color: rgba(144, 238, 144, 0.3);
-            padding: 20px;
+            padding: 10px;
             border-left: 1px solid #ccc;
             border-radius: 8px;
             box-sizing: border-box;
-            transition: all 0.3s ease;
             position: absolute;
             right: 0;
             top: 0;
             height: 100%;
             z-index: 1;
+            transition: all 0.3s ease;
         }
 
-            /* Расширенная боковая панель, которая перекрывает основной контент */
-            .sidebar.expanded {
-                width: 100%;
-                position: absolute;
-                right: 0;
-                top: 0;
-                height: 100%;
-                background-color: rgba(144, 238, 144, 0.95); /* Более плотный фон при расширении */
-                z-index: 10;
+        /* Стиль для вкладок */
+        .tabs {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tab-button {
+            width: 100%;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            margin-bottom: 5px;
+        }
+
+            .tab-button:hover {
+                background-color: #e0e0e0;
             }
+
+        /* Скрываем содержимое вкладок по умолчанию */
+        .tab-content {
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.5s ease, padding 0.3s ease;
+            background-color: rgba(144, 238, 144, 0.1);
+            margin-top: 5px;
+            border-radius: 5px;
+            padding: 0 10px;
+        }
+
+            /* Активный класс для видимой вкладки */
+            .tab-content.active {
+                max-height: 300px; /* Устанавливаем максимальную высоту для плавного раскрытия */
+                padding: 10px;
+            }
+
+        /* Расширенная боковая панель */
+        .sidebar.expanded {
+            width: 100%;
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            background-color: rgba(144, 238, 144, 0.95);
+            z-index: 10;
+        }
     </style>
 
     <script>
-        document.getElementById("toggleSidebar").addEventListener("click", function () {
+        function toggleTabContent(tabId) {
             var sidebar = document.getElementById("sidebar");
-            sidebar.classList.toggle("expanded");
+            var selectedTabContent = document.getElementById(tabId + "-content");
+
+            // Проверяем, открыта ли панель и та же ли вкладка раскрыта
+            var isActive = selectedTabContent.classList.contains("active");
+            var isSidebarExpanded = sidebar.classList.contains("expanded");
+
+            // Если вкладка уже открыта, закрываем её и скрываем панель
+            if (isActive) {
+                selectedTabContent.classList.remove("active");
+                sidebar.classList.remove("expanded");
+            } else {
+                // Если панель закрыта, открываем её
+                if (!isSidebarExpanded) {
+                    sidebar.classList.add("expanded");
+                }
+
+                // Закрываем все вкладки и открываем только текущую
+                var allTabContents = document.querySelectorAll(".tab-content");
+                allTabContents.forEach(function (content) {
+                    content.classList.remove("active");
+                });
+
+                selectedTabContent.classList.add("active");
+            }
+        }
+
+        // Закрытие боковой панели и скрытие всех вкладок при клике вне её области
+        document.addEventListener("click", function (event) {
+            var sidebar = document.getElementById("sidebar");
+            if (!sidebar.contains(event.target) && sidebar.classList.contains("expanded")) {
+                sidebar.classList.remove("expanded");
+
+                // Скрываем содержимое всех вкладок
+                var allTabContents = document.querySelectorAll(".tab-content");
+                allTabContents.forEach(function (content) {
+                    content.classList.remove("active");
+                });
+            }
         });
     </script>
 </body>
