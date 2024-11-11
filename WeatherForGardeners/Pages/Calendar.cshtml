@@ -1,0 +1,58 @@
+﻿@page
+@model WeatherForGardeners.Pages.CalendarModel
+@{
+    ViewData["Title"] = "Календарь";
+}
+
+<h2>Календарь: @Model.CalendarData.Month/@Model.CalendarData.Year</h2>
+
+
+<head>
+    <meta charset="UTF-8">
+    <title>Календарь</title>
+    <link rel="stylesheet" href="~/css/calendar.css" />
+</head>
+<body>
+    <div class="calendar-container">
+        <h2>Календарь: @Model.CalendarData.Month/@Model.CalendarData.Year</h2>
+
+        <div class="navigation">
+            <a class="button prev-month" asp-page="/Calendar" asp-route-month="@(Model.CalendarData.Month - 1)" asp-route-year="@(Model.CalendarData.Year)">
+                &#9664; Предыдущий месяц
+            </a>
+            <a class="button next-month" asp-page="/Calendar" asp-route-month="@(Model.CalendarData.Month + 1)" asp-route-year="@(Model.CalendarData.Year)">
+                Следующий месяц &#9654;
+            </a>
+        </div>
+
+        <table class="calendar">
+            <thead>
+                <tr>
+                    <th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.CalendarData.Days.Count; i += 7)
+                {
+                    <tr>
+                        @for (int j = i; j < i + 7 && j < Model.CalendarData.Days.Count; j++)
+                        {
+                            var day = Model.CalendarData.Days[j];
+                            var taskClass = day.TaskCount > 0 ? "has-tasks" : "no-tasks";
+                            var todayClass = day.IsToday ? "today" : "";
+
+                            <td class="calendar-day @taskClass @todayClass">
+                                <a asp-page="/DayDetails" asp-route-date="@(day.Date.ToString("yyyy-MM-dd"))">
+                                    <div class="day-number">@day.Date.Day</div>
+                                    <div class="task-count">Задач: @day.TaskCount</div>
+                                </a>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+
+

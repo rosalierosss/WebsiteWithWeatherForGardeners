@@ -1,0 +1,134 @@
+﻿* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    font-family: Arial, sans-serif;
+    min-height: 100vh; /* Обеспечиваем, что body будет как минимум на всю высоту экрана */
+    display: flex;
+    flex-direction: column; /* Ставим flex-контейнер для вертикального выравнивания */
+}
+
+
+.calendar-container {
+    width: 90%;
+    max-width: 800px;
+    background-color: #ffffff;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.button {
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #007bff;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+.calendar {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.calendar th {
+    background-color: #f0f0f0;
+    padding: 10px;
+    color: #333;
+}
+
+.calendar td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+    vertical-align: top;
+    transition: background-color 0.3s;
+}
+
+.calendar-day {
+    height: 80px;
+    cursor: pointer;
+    position: relative;
+}
+
+.calendar-day a {
+    color: inherit;
+    text-decoration: none;
+    display: block;
+    height: 100%;
+}
+
+.day-number {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.task-count {
+    font-size: 0.9em;
+    color: #777;
+    margin-top: 5px;
+}
+
+/* Сегодняшняя дата */
+.today {
+    background-color: #e6f7ff;
+    border: 2px solid #1890ff;
+}
+
+/* Ячейка с задачами */
+.has-tasks {
+    background-color: #e0f7fa;
+}
+
+.has-tasks:hover {
+    background-color: #b2ebf2;
+}
+
+/* Ячейка без задач */
+.no-tasks {
+    color: #b0bec5;
+}
+
+.no-tasks:hover {
+    background-color: #f0f0f0;
+}
+
+/* Навигация кнопок */
+.prev-month, .next-month {
+    font-size: 0.9em;
+    display: inline-flex;
+    align-items: center;
+    padding: 8px;
+}
+
+.prev-month::before {
+    content: "◀";
+    margin-right: 5px;
+}
+
+.next-month::after {
+    content: "▶";
+    margin-left: 5px;
+}

@@ -1,0 +1,88 @@
+﻿.forecast-container {
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-x: auto;
+}
+
+.forecast-details-horizontal {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 10px 0;
+}
+
+.forecast-item {
+    flex: 1 1 auto; /* Позволяем блоку расти по вертикали */
+    min-width: 120px;
+    max-width: 120px;
+    text-align: center;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #00796b;
+    color: #004d40;
+    font-family: Arial, sans-serif;
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Центрируем содержимое по горизонтали */
+    gap: 5px;
+    box-sizing: border-box;
+}
+
+.forecast-item:hover {
+    transform: scale(1.05);
+}
+
+/* Цвета для различных типов погоды */
+.forecast-item.cloudy {
+    background-color: #d3d3d3;
+}
+
+.forecast-item.sunny {
+    background-color: #ffeb3b;
+}
+
+.forecast-item.rainy {
+    background-color: #4fc3f7;
+    color: #ffffff;
+}
+
+.forecast-item.snowy {
+    background-color: #ffffff;
+    color: #333;
+    border: 1px solid #ccc;
+}
+
+.forecast-item.default {
+    background-color: #b2dfdb;
+}
+
+.forecast-item img {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 5px;
+}
+
+.time {
+    font-weight: bold;
+    color: #00796b;
+    font-size: 0.9em;
+}
+
+.description {
+    font-size: 0.85em;
+    white-space: normal; /* Разрешаем перенос строк */
+    overflow: hidden;
+    text-align: center;
+    line-height: 1.2; /* Улучшает читаемость */
+    margin: 5px 0;
+}
+
+.temperature {
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #004d40;
+}
