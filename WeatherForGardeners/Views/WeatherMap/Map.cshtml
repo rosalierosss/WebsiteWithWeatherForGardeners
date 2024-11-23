@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "Карта";
+}
+
+<h2>Выберите точку на карте</h2>
+
+<div id="map" style="width: 100%; height: 500px;"></div>
+
+<script src="https://api-maps.yandex.ru/2.1/?apikey=96433db7-2018-4d0d-840c-7a7b3b37ef63&lang=ru_RU"></script>
+
+<script>
+    ymaps.ready(init);
+
+    function init() {
+        var map = new ymaps.Map("map", {
+            center: [55.751574, 37.573856],
+            zoom: 5
+        });
+
+        ymaps.borders.load('RU', {
+            lang: 'ru',
+            quality: 3
+        }).then(function (result) {
+            result.features.forEach(function (feature) {
+                var regionPolygon = new ymaps.Polygon(feature.geometry.coordinates, {
+                    hintContent: feature.properties.name
+                }, {
+                    fillColor: 'rgba(220, 220, 220, 0.6)',
+                    strokeColor: '#aaaaaa',
+                    strokeWidth: 1.5,
+                    opacity: 0.6
+                });
+
+                map.geoObjects.add(regionPolygon);
+
+                regionPolygon.events.add('click', function (e) {
+                    var coords = e.get('coords');
+                    var regionName = feature.properties.name;
+
+                    window.location.href = '/WeatherMap/Weather?lat=' + coords[0] + '&lon=' + coords[1] + '&region=' + encodeURIComponent(regionName);
+                });
+            });
+        }).catch(function (error) {
+            console.error('Ошибка загрузки границ:', error);
+        });
+    }
+</script>

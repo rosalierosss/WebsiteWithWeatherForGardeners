@@ -1,7 +1,10 @@
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+//builder.Services.AddRazorPages();
+
+// Добавить поддержку контроллеров с представлениями вместо Razor Pages
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
@@ -20,6 +23,12 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapRazorPages();
+//app.MapRazorPages();
+
+app.MapControllers();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

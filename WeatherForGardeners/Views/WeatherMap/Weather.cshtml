@@ -1,21 +1,21 @@
-﻿@page
-@model ResultModel
+﻿@model Dictionary<string, List<WeatherForGardeners.Controllers.WeatherForecast>>
 
-<h2>Прогноз погоды для @Model.Region</h2>
+<h2>Прогноз погоды для @ViewData["Region"]</h2>
 <div>
-    Широта: @Model.Latitude, Долгота: @Model.Longitude
+    Широта: @ViewData["Latitude"], Долгота: @ViewData["Longitude"]
 </div>
 
 <link rel="stylesheet" href="~/css/weather.css" />
+
 <div class="forecast-container">
-    @foreach (var day in Model.DailyForecasts)
+    @foreach (var day in Model)
     {
         <div class="day-forecast">
             <h3>@day.Key</h3>
             <div class="forecast-details-horizontal">
                 @foreach (var forecast in day.Value)
                 {
-                    <div class="forecast-item @(Model.GetWeatherClass(forecast.Description))">
+                    <div class="forecast-item @forecast.WeatherClass">
                         <p class="time"><strong>@forecast.Time</strong></p>
                         <img src="@($"https://openweathermap.org/img/wn/{forecast.Icon}@2x.png")" alt="Иконка погоды" />
                         <p class="description">@forecast.Description</p>
@@ -26,3 +26,4 @@
         </div>
     }
 </div>
+

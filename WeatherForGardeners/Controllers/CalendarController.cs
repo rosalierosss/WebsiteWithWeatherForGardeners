@@ -1,20 +1,19 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+п»їusing Microsoft.AspNetCore.Mvc;
 using WeatherForGardeners.Models;
 using WeatherForGardeners.ViewModels;
 
-namespace WeatherForGardeners.Pages
+namespace WeatherForGardeners.Controllers
 {
-    public class CalendarModel : PageModel
+    [Route("Calendar")]
+    public class CalendarController : Controller
     {
-        public CalendarViewModel CalendarData { get; set; }
-
-        public async Task<IActionResult> OnGetAsync(int? month, int? year)
+        [HttpGet("Index")]
+        public async Task<IActionResult> Index(int? month, int? year)
         {
             var selectedMonth = month ?? DateTime.Now.Month;
             var selectedYear = year ?? DateTime.Now.Year;
 
-            // Обработка выхода за пределы месяца
+            // РћР±СЂР°Р±РѕС‚РєР° РІС‹С…РѕРґР° Р·Р° РїСЂРµРґРµР»С‹ РјРµСЃСЏС†Р°
             if (selectedMonth > 12)
             {
                 selectedMonth = 1;
@@ -26,15 +25,15 @@ namespace WeatherForGardeners.Pages
                 selectedYear--;
             }
 
-            // Получение данных для календаря
-            CalendarData = new CalendarViewModel
+            // РџРѕР»СѓС‡РµРЅРёРµ РґР°РЅРЅС‹С… РґР»СЏ РєР°Р»РµРЅРґР°СЂСЏ
+            var calendarData = new CalendarViewModel
             {
                 Year = selectedYear,
                 Month = selectedMonth,
                 Days = await GetDaysWithTasks(selectedYear, selectedMonth)
             };
 
-            return Page();
+            return View(calendarData); // РџРµСЂРµРґР°С‡Р° РґР°РЅРЅС‹С… РІ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ
         }
 
         private async Task<List<CalendarDay>> GetDaysWithTasks(int year, int month)
