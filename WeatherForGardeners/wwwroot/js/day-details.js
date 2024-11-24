@@ -1,41 +1,17 @@
-﻿document.getElementById("save-button").addEventListener("click", function () {
-    const checkboxes = document.querySelectorAll(".task-status");
-    const updates = [];
+﻿let pendingChanges = { added: [], edited: [], updatedStatuses: [] };
 
-    checkboxes.forEach((checkbox) => {
-        updates.push({
-            taskId: parseInt(checkbox.dataset.taskId, 10),
-            isCompleted: checkbox.checked,
-        });
-    });
+// Обновление статуса задачи
+document.querySelectorAll(".task-status").forEach((checkbox) => {
+    checkbox.addEventListener("change", function () {
+        const taskId = parseInt(this.dataset.taskId, 10);
+        const isCompleted = this.checked;
 
-    fetch("/DayDetails/UpdateTaskStatus", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updates),
-    })
-    .then((response) => {
-        if (!response.ok) {
-            throw new Error(`HTTP Error: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then((data) => {
-        if (data.success) {
-            showNotification("Изменения сохранены");
-        } else {
-            showNotification("Ошибка при сохранении", true);
-        }
-    })
-    .catch((error) => {
-        console.error("Ошибка соединения с сервером:", error);
-        showNotification("Ошибка соединения", true);
+        pendingChanges.updatedStatuses.push({ taskId, isCompleted });
     });
 });
 
-document.querySelectorAll(".edit-button").forEach(button => {
+// Редактирование задачи
+document.querySelectorAll(".edit-button").forEach((button) => {
     button.addEventListener("click", function () {
         const taskId = this.dataset.taskId;
         const taskTitle = this.dataset.taskTitle;
@@ -50,6 +26,7 @@ document.querySelectorAll(".edit-button").forEach(button => {
     });
 });
 
+// Добавление задачи
 document.getElementById("add-task-button").addEventListener("click", function () {
     document.getElementById("modal-title").innerText = "Добавить задачу";
     document.getElementById("edit-task-id").value = "";
@@ -59,10 +36,12 @@ document.getElementById("add-task-button").addEventListener("click", function ()
     document.getElementById("edit-modal").style.display = "block";
 });
 
+// Отмена редактирования
 document.getElementById("cancel-edit").addEventListener("click", function () {
     document.getElementById("edit-modal").style.display = "none";
 });
 
+// Обработка сохранения формы (добавление или редактирование)
 document.getElementById("edit-form").addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -70,39 +49,76 @@ document.getElementById("edit-form").addEventListener("submit", function (e) {
     const taskTitle = document.getElementById("edit-task-title").value;
     const taskDescription = document.getElementById("edit-task-description").value;
 
-    const url = taskId ? "/DayDetails/EditTask" : "/DayDetails/AddTask";
-    const body = taskId
-        ? { taskId: parseInt(taskId, 10), title: taskTitle, description: taskDescription }
-        : { title: taskTitle, description: taskDescription };
+    if (taskId) {
+        // Редактирование задачи
+        pendingChanges.edited.push({
+            taskId: parseInt(taskId, 10),
+            title: taskTitle,
+            description: taskDescription,
+        });
 
-    fetch(url, {
+        const taskElement = document.querySelector(`[data-task-id='${taskId}']`).closest("li");
+        taskElement.querySelector("strong").innerText = taskTitle;
+        taskElement.querySelector("p").innerText = taskDescription;
+    } else {
+        // Добавление новой задачи
+        const tempId = Date.now(); // Генерация временного ID
+        pendingChanges.added.push({ tempId, title: taskTitle, description: taskDescription });
+
+        // Отображение новой задачи
+        const newTask = document.createElement("li");
+        newTask.innerHTML = `
+            <strong>${taskTitle}</strong>
+            <p>${taskDescription}</p>
+            <label>
+                <input type="checkbox" class="task-status" data-task-id="${tempId}" />
+                Выполнено
+            </label>
+            <button class="edit-button" data-task-id="${tempId}" data-task-title="${taskTitle}" data-task-description="${taskDescription}">Редактировать</button>
+        `;
+        document.getElementById("task-list").appendChild(newTask);
+    }
+
+    document.getElementById("edit-modal").style.display = "none";
+});
+
+// Сохранение изменений
+document.getElementById("save-button").addEventListener("click", function () {
+    // Используем глобальную переменную currentDay
+    fetch(`/DayDetails/SaveAllChanges?date=${encodeURIComponent(currentDay)}`, {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify(pendingChanges),
     })
-        .then(response => {
+        .then((response) => {
             if (!response.ok) {
-                throw new Error(`Ошибка HTTP: ${response.status}`);
+                throw new Error(`HTTP Error: ${response.status}`);
             }
             return response.json();
         })
-        .then(data => {
+        .then((data) => {
             if (data.success) {
-                showNotification(taskId ? "Задача обновлена" : "Задача добавлена");
-                location.reload();
+                showNotification("Все изменения сохранены");
+
+                // Очистить локальные изменения
+                pendingChanges = { added: [], edited: [], updatedStatuses: [] };
+
+                console.log("Изменения сохранены на сервере.");
             } else {
-                showNotification("Ошибка сохранения", "error");
+                showNotification("Ошибка при сохранении", true);
             }
         })
-        .catch(error => {
-            console.error("Ошибка:", error);
-            showNotification("Ошибка соединения с сервером", "error");
+        .catch((error) => {
+            console.error("Ошибка соединения с сервером:", error);
+            showNotification("Ошибка соединения", true);
         });
 });
 
 
+
+// Функция отображения уведомлений
 function showNotification(message, isError = false) {
     const notification = document.createElement("div");
     notification.className = "notification" + (isError ? " error" : "");
@@ -119,15 +135,4 @@ function showNotification(message, isError = false) {
         notification.classList.remove("show");
         setTimeout(() => notification.remove(), 300); // Удалить после исчезновения
     }, 2000);
-}
-
-/* Управление модальным окном */
-function showModal(modalId) {
-    document.querySelector(".modal-backdrop").style.display = "block";
-    document.getElementById(modalId).style.display = "block";
-}
-
-function hideModal(modalId) {
-    document.querySelector(".modal-backdrop").style.display = "none";
-    document.getElementById(modalId).style.display = "none";
 }

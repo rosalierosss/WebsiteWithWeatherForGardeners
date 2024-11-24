@@ -42,22 +42,56 @@ namespace WeatherForGardeners.Controllers
             return BadRequest("Неверный формат даты");
         }
 
-        [HttpPost("UpdateTaskStatus")]
-        public IActionResult UpdateTaskStatus([FromBody] List<TaskStatusUpdateModel> updates)
+        [HttpPost("SaveAllChanges")]
+        public IActionResult SaveAllChanges([FromQuery] DateTime date, [FromBody] AllChangesModel changes)
         {
-            if (updates == null || !updates.Any())
+            if (changes == null)
             {
-                return BadRequest(new { success = false, message = "Нет данных для обновления." });
+                return BadRequest(new { success = false, message = "Нет данных для сохранения." });
             }
 
-            foreach (var update in updates)
+            // Обработка добавленных задач
+            foreach (var newTask in changes.Added)
+            {
+                var task = new TaskItem
+                {
+                    Id = TasksData.Values.SelectMany(t => t).Max(t => t.Id) + 1,
+                    Title = newTask.Title,
+                    Description = newTask.Description,
+                    IsCompleted = false
+                };
+
+                if (!TasksData.ContainsKey(date))
+                {
+                    TasksData[date] = new List<TaskItem>();
+                }
+
+                TasksData[date].Add(task);
+            }
+
+            // Обработка отредактированных задач
+            foreach (var editedTask in changes.Edited)
             {
                 foreach (var tasks in TasksData.Values)
                 {
-                    var task = tasks.FirstOrDefault(t => t.Id == update.TaskId);
+                    var task = tasks.FirstOrDefault(t => t.Id == editedTask.TaskId);
                     if (task != null)
                     {
-                        task.IsCompleted = update.IsCompleted;
+                        task.Title = editedTask.Title;
+                        task.Description = editedTask.Description;
+                    }
+                }
+            }
+
+            // Обработка обновления статусов
+            foreach (var statusUpdate in changes.UpdatedStatuses)
+            {
+                foreach (var tasks in TasksData.Values)
+                {
+                    var task = tasks.FirstOrDefault(t => t.Id == statusUpdate.TaskId);
+                    if (task != null)
+                    {
+                        task.IsCompleted = statusUpdate.IsCompleted;
                     }
                 }
             }
@@ -65,52 +99,6 @@ namespace WeatherForGardeners.Controllers
             return Ok(new { success = true });
         }
 
-        [HttpPost("EditTask")]
-        public IActionResult EditTask([FromBody] TaskEditModel model)
-        {
-            if (model == null || model.TaskId <= 0)
-            {
-                return BadRequest(new { success = false, message = "Некорректные данные" });
-            }
-
-            foreach (var tasks in TasksData.Values)
-            {
-                var task = tasks.FirstOrDefault(t => t.Id == model.TaskId);
-                if (task != null)
-                {
-                    task.Title = model.Title;
-                    task.Description = model.Description;
-                    return Ok(new { success = true });
-                }
-            }
-
-            return NotFound(new { success = false, message = "Задача не найдена" });
-        }
-
-        [HttpPost("AddTask")]
-        public IActionResult AddTask([FromBody] TaskCreateModel model)
-        {
-            if (model == null || string.IsNullOrWhiteSpace(model.Title))
-            {
-                return BadRequest(new { success = false, message = "Некорректные данные" });
-            }
-
-            var newTask = new TaskItem
-            {
-                Id = TasksData.Values.SelectMany(t => t).Max(t => t.Id) + 1,
-                Title = model.Title,
-                Description = model.Description,
-                IsCompleted = false
-            };
-
-            if (!TasksData.ContainsKey(DateTime.Today))
-            {
-                TasksData[DateTime.Today] = new List<TaskItem>();
-            }
-
-            TasksData[DateTime.Today].Add(newTask);
-            return Ok(new { success = true });
-        }
 
     }
 }

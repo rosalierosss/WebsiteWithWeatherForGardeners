@@ -6,29 +6,22 @@
 
 <h2>@ViewData["Title"]</h2>
 
-@if (Model.Tasks.Any())
-{
-    <ul id="task-list">
-        @foreach (var task in Model.Tasks)
-        {
-            <li>
-                <strong>@task.Title</strong>
-                <p>@task.Description</p>
-                <label>
-                    <input type="checkbox" class="task-status" data-task-id="@task.Id" @(task.IsCompleted ? "checked" : "") />
-                    Выполнено
-                </label>
-                <button class="edit-button" data-task-id="@task.Id" data-task-title="@task.Title" data-task-description="@task.Description">Редактировать</button>
-            </li>
-        }
-    </ul>
-    <button id="save-button">Сохранить изменения</button>
-}
-else
-{
-    <p>Дел на этот день нет.</p>
-}
+<ul id="task-list">
+    @foreach (var task in Model.Tasks)
+    {
+        <li>
+            <strong>@task.Title</strong>
+            <p>@task.Description</p>
+            <label>
+                <input type="checkbox" class="task-status" data-task-id="@task.Id" @(task.IsCompleted ? "checked" : "") />
+                Выполнено
+            </label>
+            <button class="edit-button" data-task-id="@task.Id" data-task-title="@task.Title" data-task-description="@task.Description">Редактировать</button>
+        </li>
+    }
+</ul>
 
+<button id="save-button">Сохранить изменения</button>
 <button id="add-task-button">Добавить задачу</button>
 
 <!-- Модальное окно -->
@@ -52,6 +45,8 @@ else
 </div>
 
 @section Scripts {
+    <script>
+        const currentDay = "@Model.Date.ToString("yyyy-MM-dd")";
+    </script>
     <script src="/js/day-details.js"></script>
 }
-
