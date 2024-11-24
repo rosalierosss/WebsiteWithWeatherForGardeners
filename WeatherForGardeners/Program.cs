@@ -1,14 +1,32 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using WeatherForGardeners.Data;
+using WeatherForGardeners.Models;
 using WeatherForGardeners.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-//builder.Services.AddRazorPages();
 
-// Добавить поддержку контроллеров с представлениями вместо Razor Pages
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddSingleton<TaskRepository>();
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
+builder.Services.AddIdentity<AppUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(40);
+    options.LoginPath = "/Account/Login";
+    options.SlidingExpiration = true;
+});
 
 
 var app = builder.Build();
@@ -26,9 +44,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
-
-//app.MapRazorPages();
 
 app.MapControllers();
 
