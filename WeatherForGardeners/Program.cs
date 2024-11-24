@@ -1,3 +1,5 @@
+using WeatherForGardeners.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Добавить поддержку контроллеров с представлениями вместо Razor Pages
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddSingleton<TaskRepository>();
+
 
 var app = builder.Build();
 
