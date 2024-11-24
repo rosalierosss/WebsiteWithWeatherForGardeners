@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
+using WeatherForGardeners.Models;
 
 namespace WeatherForGardeners.Controllers
 {
@@ -59,17 +60,5 @@ namespace WeatherForGardeners.Controllers
                 return "snowy";
             return "default";
         }
-    }
-
-    // Модель прогноза погоды
-    public class WeatherForecast
-    {
-        public string Date { get; set; }
-        public string Time { get; set; }
-        public string Description { get; set; }
-        public double Temperature { get; set; }
-        public string Icon { get; set; }
-
-        public string WeatherClass { get; set; }
     }
 }
