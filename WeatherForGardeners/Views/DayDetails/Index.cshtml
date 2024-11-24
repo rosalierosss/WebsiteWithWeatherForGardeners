@@ -1,0 +1,72 @@
+﻿@model DayDetailsViewModel
+
+@{
+    ViewData["Title"] = $"Список дел на {Model.Date:dd.MM.yyyy}";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (Model.Tasks.Any())
+{
+    <ul id="task-list">
+        @foreach (var task in Model.Tasks)
+        {
+            <li>
+                <strong>@task.Title</strong>
+                <p>@task.Description</p>
+                <label>
+                    <input type="checkbox" class="task-status" data-task-id="@task.Id" @(task.IsCompleted ? "checked" : "") />
+                    Выполнено
+                </label>
+            </li>
+        }
+    </ul>
+    <button id="save-button">Сохранить изменения</button>
+}
+else
+{
+    <p>Дел на этот день нет.</p>
+}
+
+@section Scripts {
+    <script>
+        document.getElementById("save-button").addEventListener("click", function () {
+            const checkboxes = document.querySelectorAll(".task-status");
+            const updates = [];
+
+            checkboxes.forEach(checkbox => {
+                updates.push({
+                    taskId: parseInt(checkbox.dataset.taskId, 10), // Убедитесь, что ID отправляется как число
+                    isCompleted: checkbox.checked
+                });
+            });
+
+            fetch("/DayDetails/UpdateTaskStatus", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(updates)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Ошибка HTTP: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Ответ сервера:", data); // Для проверки в консоли браузера
+                    if (data.success) {
+                        alert("Изменения сохранены");
+                    } else {
+                        alert("Произошла ошибка при сохранении");
+                    }
+                })
+                .catch(error => {
+                    console.error("Ошибка соединения с сервером:", error);
+                    alert("Ошибка соединения с сервером");
+                });
+        });
+    </script>
+}
+
