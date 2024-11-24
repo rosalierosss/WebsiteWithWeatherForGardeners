@@ -1,0 +1,116 @@
+﻿/* Основные стили */
+body {
+    font-family: Arial, sans-serif;
+}
+
+#task-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+
+
+/* Модальное окно */
+#edit-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border: 1px solid black;
+    padding: 20px;
+    z-index: 1000;
+}
+
+#edit-modal label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+#edit-modal button {
+    margin-right: 5px;
+}
+
+
+
+.notification.success {
+    background-color: #28a745;
+}
+
+.notification.error {
+    background-color: #dc3545;
+}
+
+
+
+/* Общий стиль задач */
+#task-list li {
+    background-color: rgba(144, 238, 144, 0.2); /* Легкий зеленый фон */
+    border: 1px solid #90ee90; /* Обрамление светло-зеленым */
+    border-radius: 8px; /* Округленные углы */
+    margin-bottom: 10px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Кнопки */
+button {
+    background-color: #4caf50; /* Зеленый фон */
+    color: white; /* Белый текст */
+    border: none;
+    border-radius: 5px; /* Округленные углы */
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049; /* Темно-зеленый при наведении */
+}
+
+/* Модальное окно */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачное затемнение */
+    z-index: 999;
+    display: none; /* Скрыто по умолчанию */
+}
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: none; /* Скрыто по умолчанию */
+}
+
+/* Уведомления */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #4caf50; /* Зеленый фон */
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    opacity: 0; /* Скрыто по умолчанию */
+    transform: translateY(-20px); /* Поднимается при появлении */
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
