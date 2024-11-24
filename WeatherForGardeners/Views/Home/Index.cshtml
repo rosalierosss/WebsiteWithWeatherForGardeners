@@ -1,7 +1,38 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model List<Plant>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scrolling Plants</title>
+</head>
+<body>
+    <div class="scrolling-container">
+        <div class="scrolling-content">
+            @foreach (var plant in Model)
+            {
+                <div class="plant-item">
+                    <img src="@plant.PhotoUrl" alt="@plant.Name" />
+                    <h3>@plant.Name</h3>
+                    <p>@plant.Description</p>
+                </div>
+            }
+
+            <!-- Дублируем элементы для бесшовного эффекта -->
+            @foreach (var plant in Model)
+            {
+                <div class="plant-item">
+                    <img src="@plant.PhotoUrl" alt="@plant.Name" />
+                    <h3>@plant.Name</h3>
+                    <p>@plant.Description</p>
+                </div>
+            }
+        </div>
+    </div>
+</body>
+</html>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/carusel.css" />
 }
 
-Index
+ 
