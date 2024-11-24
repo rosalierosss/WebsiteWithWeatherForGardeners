@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
 using WeatherForGardeners.Models;
 
 namespace WeatherForGardeners.Controllers
 {
+    [Authorize]
     public class WeatherMapController : Controller
     {
         private readonly string _apiKey = "7623034d8696d6abcb4117e9089caf84"; // Ваш API-ключ

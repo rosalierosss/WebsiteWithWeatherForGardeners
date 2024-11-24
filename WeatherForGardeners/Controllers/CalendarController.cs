@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WeatherForGardeners.Models;
 using WeatherForGardeners.Services;
 using WeatherForGardeners.ViewModels;
 
 namespace WeatherForGardeners.Controllers
 {
+    [Authorize]
     [Route("Calendar")]
     public class CalendarController : Controller
     {

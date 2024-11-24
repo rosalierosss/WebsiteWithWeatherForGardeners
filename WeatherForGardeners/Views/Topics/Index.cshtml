@@ -1,0 +1,47 @@
+﻿@model List<Topic>
+
+<div class="container">
+    <div class="row">
+        <!-- Первый столбец: Список тем -->
+        <div class="col-md-3">
+            <div class="list-group">
+                @foreach (var topic in Model)
+                {
+                    <div class="list-group-item">
+                        <a href="javascript:void(0)"
+                           onclick="showTopicDetails('@topic.Title', '@topic.Description', `@Html.Raw(topic.Content.Replace("\r\n", "<br />"))`)">
+                            @topic.Title
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Второй столбец: Детали выбранной темы -->
+        <div class="col-md-9">
+            <div id="topicDetails">
+                <h2>Выберите тему</h2>
+                <p>Здесь появится описание и текст выбранной темы.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function showTopicDetails(title, description, content) {
+            const detailsContainer = document.getElementById('topicDetails');
+            detailsContainer.innerHTML = `
+                                <h2>${title}</h2>
+                                <p><strong>Описание:</strong> ${description}</p>
+                                <div>${content}</div>
+                            `;
+        }
+    </script>
+}
+
+
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/topics-list.css" />
+}

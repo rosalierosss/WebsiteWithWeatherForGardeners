@@ -1,0 +1,11 @@
+﻿@model Topic
+
+<h2>@Model.Title</h2>
+<p><strong>Описание:</strong> @Model.Description</p>
+<div>
+    <p>@Model.Content</p>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/topics-list.css" asp-append-version="true" />
+}

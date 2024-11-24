@@ -6,9 +6,7 @@
     <title>@ViewData["Title"] - WeatherForGardeners</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/calendar.css" />
-    <link rel="stylesheet" href="~/css/weather.css" />
-    <link rel="stylesheet" href="~/css/task-list.css" />
+
 </head>
 <body>
     <header>
@@ -29,6 +27,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Calendar" asp-action="Index">Календарь</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Topics" asp-action="Index">База знаний</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav">
@@ -64,6 +65,8 @@
 
 
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Styles", required: false)
 </body>
 </html>

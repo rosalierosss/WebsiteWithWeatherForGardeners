@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WeatherForGardeners.DTOs;
 using WeatherForGardeners.Models;
 using WeatherForGardeners.Services;
@@ -6,6 +7,7 @@ using WeatherForGardeners.ViewModels;
 
 namespace WeatherForGardeners.Controllers
 {
+    [Authorize]
     [Route("DayDetails")]
     public class DayDetailsController : Controller
     {
