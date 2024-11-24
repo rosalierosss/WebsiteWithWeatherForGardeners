@@ -64,5 +64,53 @@ namespace WeatherForGardeners.Controllers
 
             return Ok(new { success = true });
         }
+
+        [HttpPost("EditTask")]
+        public IActionResult EditTask([FromBody] TaskEditModel model)
+        {
+            if (model == null || model.TaskId <= 0)
+            {
+                return BadRequest(new { success = false, message = "Некорректные данные" });
+            }
+
+            foreach (var tasks in TasksData.Values)
+            {
+                var task = tasks.FirstOrDefault(t => t.Id == model.TaskId);
+                if (task != null)
+                {
+                    task.Title = model.Title;
+                    task.Description = model.Description;
+                    return Ok(new { success = true });
+                }
+            }
+
+            return NotFound(new { success = false, message = "Задача не найдена" });
+        }
+
+        [HttpPost("AddTask")]
+        public IActionResult AddTask([FromBody] TaskCreateModel model)
+        {
+            if (model == null || string.IsNullOrWhiteSpace(model.Title))
+            {
+                return BadRequest(new { success = false, message = "Некорректные данные" });
+            }
+
+            var newTask = new TaskItem
+            {
+                Id = TasksData.Values.SelectMany(t => t).Max(t => t.Id) + 1,
+                Title = model.Title,
+                Description = model.Description,
+                IsCompleted = false
+            };
+
+            if (!TasksData.ContainsKey(DateTime.Today))
+            {
+                TasksData[DateTime.Today] = new List<TaskItem>();
+            }
+
+            TasksData[DateTime.Today].Add(newTask);
+            return Ok(new { success = true });
+        }
+
     }
 }
