@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WeatherForGardeners.Models;
+using WeatherForGardeners.Services;
 using WeatherForGardeners.ViewModels;
 
 namespace WeatherForGardeners.Controllers
@@ -7,6 +8,13 @@ namespace WeatherForGardeners.Controllers
     [Route("Calendar")]
     public class CalendarController : Controller
     {
+        private readonly TaskRepository _taskRepository;
+
+        public CalendarController(TaskRepository taskRepository)
+        {
+            _taskRepository = taskRepository;
+        }
+
         [HttpGet("Index")]
         public async Task<IActionResult> Index(int? month, int? year)
         {
@@ -59,7 +67,9 @@ namespace WeatherForGardeners.Controllers
 
         private async Task<int> GetTaskCountForDay(DateTime date)
         {
-            return await Task.FromResult(new Random().Next(0, 5));
+            // Получение количества задач на конкретный день через репозиторий
+            var tasks = _taskRepository.GetTasksByDate(date);
+            return tasks.Count;
         }
     }
 }
