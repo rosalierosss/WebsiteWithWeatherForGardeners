@@ -3,7 +3,7 @@
 <h2>@Model.Title</h2>
 <p><strong>Описание:</strong> @Model.Description</p>
 <div>
-    <p>@Model.Content</p>
+    @Html.Raw(Model.Content)
 </div>
 
 @section Styles {

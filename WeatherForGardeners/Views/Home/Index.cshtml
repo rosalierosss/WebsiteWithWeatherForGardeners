@@ -4,6 +4,8 @@
 <html>
 <head>
     <title>Scrolling Plants</title>
+    <link rel="stylesheet" href="~/css/carusel.css?v=1.0" />
+    <link rel="stylesheet" href="~/css/index.css?v=1.0" />
 </head>
 <body>
     <div class="scrolling-container">
@@ -11,27 +13,75 @@
             @foreach (var plant in Model)
             {
                 <div class="plant-item">
-                    <img src="@plant.PhotoUrl" alt="@plant.Name" />
-                    <h3>@plant.Name</h3>
-                    <p>@plant.Description</p>
-                </div>
-            }
-
-            <!-- Дублируем элементы для бесшовного эффекта -->
-            @foreach (var plant in Model)
-            {
-                <div class="plant-item">
-                    <img src="@plant.PhotoUrl" alt="@plant.Name" />
-                    <h3>@plant.Name</h3>
-                    <p>@plant.Description</p>
+                    <div class="image-wrapper">
+                        <img src="@plant.PhotoUrl" alt="@plant.Name" />
+                    </div>
+                    <div class="plant-info">
+                        <h3>@plant.Name</h3>
+                        <p class="description">@plant.Description</p>
+                    </div>
                 </div>
             }
         </div>
     </div>
+    <div class="container mt-4">
+        <!-- Приветственный заголовок -->
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="text-success">Добро пожаловать на сайт для дачников!</h1>
+                <p class="text-muted">
+                    Здесь каждый любитель сада и огорода найдет что-то полезное: будь вы начинающий дачник или опытный садовод.
+                </p>
+            </div>
+        </div>
+
+        <!-- Основные возможности сайта -->
+        <div class="row mt-4">
+            <!-- Погода -->
+            <div class="col-md-4 text-center">
+                <img src="~/images/weather.png" alt="Прогноз погоды" class="img-fluid rounded mb-3" />
+                <h3>Прогноз погоды</h3>
+                <p>
+                    Следите за погодой в режиме реального времени, чтобы знать, когда лучше поливать растения, проводить посадку или планировать работы в саду.
+                </p>
+            </div>
+
+            <!-- Календарь для заметок -->
+            <div class="col-md-4 text-center">
+                <img src="~/images/calendar.png" alt="Календарь садовода" class="img-fluid rounded mb-3" />
+                <h3>Календарь для заметок</h3>
+                <p>
+                    Планируйте свои садовые дела с помощью нашего интерактивного календаря. Добавляйте заметки о посадках, уборке урожая и других важных событиях.
+                </p>
+            </div>
+
+            <!-- База знаний -->
+            <div class="col-md-4 text-center">
+                <img src="~/images/topics.png" alt="База знаний" class="img-fluid rounded mb-3" />
+                <h3>База знаний</h3>
+                <p>
+                    Читайте статьи о правильном уходе за растениями, защите от вредителей, удобрениях и многом другом. Здесь вы найдете полезные советы на любую тему.
+                </p>
+            </div>
+        </div>
+
+        <!-- Заключительное приглашение -->
+        <div class="row mt-5">
+            <div class="col-12 text-center">
+                <p class="lead">
+                    Откройте для себя все возможности нашего сайта и сделайте ваш сад настоящим шедевром!
+                </p>
+                <a href="/Topics" class="btn btn-success btn-lg">Перейти к статьям</a>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="~/js/carusel.js?v=1.0"></script>
 </body>
 </html>
 
-@section Styles {
-    <link rel="stylesheet" href="~/css/carusel.css" />
-}
+
+
+
 
