@@ -12,10 +12,12 @@ namespace WeatherForGardeners.Controllers
     public class DayDetailsController : Controller
     {
         private readonly TaskRepository _taskRepository;
+        private readonly HtmlContentRepository _htmlContentRepository;
 
-        public DayDetailsController(TaskRepository taskRepository)
+        public DayDetailsController(TaskRepository taskRepository, HtmlContentRepository htmlContentRepository)
         {
             _taskRepository = taskRepository;
+            _htmlContentRepository = htmlContentRepository;
         }
 
 
@@ -25,11 +27,13 @@ namespace WeatherForGardeners.Controllers
             if (DateTime.TryParse(date, out var parsedDate))
             {
                 var tasks = _taskRepository.GetTasksByDate(parsedDate);
+                var html = _htmlContentRepository.GetHtmlByDate(parsedDate);
 
                 var viewModel = new DayDetailsViewModel
                 {
                     Date = parsedDate,
-                    Tasks = tasks
+                    Tasks = tasks,
+                    HtmlContent = html
                 };
 
                 return View(viewModel);

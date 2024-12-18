@@ -6,6 +6,7 @@ namespace WeatherForGardeners.ViewModels
     {
         public DateTime Date { get; set; }
         public List<TaskItem> Tasks { get; set; }
+        public string HtmlContent { get; set; }
     }
 
 }

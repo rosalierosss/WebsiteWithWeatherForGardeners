@@ -6,8 +6,14 @@ body {
 #task-list {
     list-style-type: none;
     padding: 0;
+    width: 60%;
+    margin-right: 80px;
 }
 
+.content-container {
+    display: flex;
+    align-items: flex-start;
+}
 
 
 /* Модальное окно */
@@ -113,4 +119,13 @@ button:hover {
 .notification.show {
     opacity: 1;
     transform: translateY(0);
+}
+
+#custom-html-content {
+    width: 35%;
+    margin-left: auto; /* Прижимает блок вправо */
+    background-color: #f9f9f9;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
