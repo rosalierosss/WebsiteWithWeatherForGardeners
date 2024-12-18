@@ -15,7 +15,10 @@ body {
 
 .calendar-container {
     width: 90%;
-    max-width: 800px;
+    display: flex;
+    margin: 0 auto;
+    gap: 20px;
+    max-width: 1300px;
     background-color: #ffffff;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -48,7 +51,7 @@ h2 {
 }
 
 .calendar {
-    width: 100%;
+    width: 70%;
     border-collapse: collapse;
     margin-top: 10px;
 }
@@ -132,3 +135,27 @@ h2 {
     content: "▶";
     margin-left: 5px;
 }
+
+/* Стили для блока с рекомендациями */
+.recommendations {
+    width: 28%; /* Рекомендации занимают оставшиеся 28% */
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow-y: auto; /* Добавляем прокрутку, если контент длинный */
+}
+
+    .recommendations h3 {
+        margin-top: 0;
+    }
+
+    .recommendations ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .recommendations li {
+        margin-bottom: 10px;
+    }

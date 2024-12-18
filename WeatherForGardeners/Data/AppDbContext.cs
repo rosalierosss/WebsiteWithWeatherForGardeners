@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using WeatherForGardeners.Models;
 
 namespace WeatherForGardeners.Data
@@ -9,6 +10,7 @@ namespace WeatherForGardeners.Data
         public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
         {
+            
         }
 
 
