@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddSingleton<TaskRepository>();
-builder.Services.AddSingleton<HtmlContentRepository>();
+builder.Services.AddTransient<HtmlContentRepository>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {

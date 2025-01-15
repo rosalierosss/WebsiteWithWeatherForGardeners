@@ -23,8 +23,12 @@ namespace WeatherForGardeners.Controllers
         public async Task<IActionResult> Weather(double lat, double lon, string region)
         {
             string apiUrl = $"https://ru.api.openweathermap.org/data/2.5/forecast?lat={lat.ToString("0.###", CultureInfo.InvariantCulture)}&lon={lon.ToString("0.###", CultureInfo.InvariantCulture)}&appid={_apiKey}&units=metric&lang=ru";
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+            };
 
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient(handler))
             {
                 var response = await client.GetStringAsync(apiUrl);
                 var weatherData = JObject.Parse(response);

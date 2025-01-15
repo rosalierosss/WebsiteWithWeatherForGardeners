@@ -13,6 +13,7 @@ namespace WeatherForGardeners.Data
             
         }
 
+        public DbSet<DayRecommendation> DayRecommendations { get; set; }
 
     }
 }
