@@ -14,6 +14,7 @@ namespace WeatherForGardeners.Data
         }
 
         public DbSet<DayRecommendation> DayRecommendations { get; set; }
+        public DbSet<TaskItem> TaskItems { get; set; }
 
     }
 }
