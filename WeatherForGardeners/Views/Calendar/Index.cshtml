@@ -52,17 +52,6 @@
             </tbody>
         </table>
     </div>
-
-    <!-- Секция с рекомендациями -->
-    <div class="recommendations">
-        <h3>Рекомендации</h3>
-        <ul>
-            @foreach (var recommendation in Model.Recommendations)
-            {
-                <li>@Html.Raw(recommendation)</li> <!-- Рендерим HTML-содержимое -->
-            }
-        </ul>
-    </div>
 </div>
 
 @section Styles {
