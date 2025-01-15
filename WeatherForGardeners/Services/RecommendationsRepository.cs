@@ -2,10 +2,10 @@
 
 namespace WeatherForGardeners.Services
 {
-    public class HtmlContentRepository
+    public class RecommendationsRepository
     {
         private AppDbContext _appDbContext;
-        public HtmlContentRepository(AppDbContext appDbContext)
+        public RecommendationsRepository(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
         }
@@ -20,7 +20,7 @@ namespace WeatherForGardeners.Services
                 return $"<p>На {date:dd.MM.yyyy} данных нет.</p>";
             } else
             {
-                return dayRec.HtmlContent;
+                return dayRec.Content;
             }
         }
 
@@ -35,13 +35,13 @@ namespace WeatherForGardeners.Services
                 _appDbContext.DayRecommendations.Add(new Models.DayRecommendation
                 {
                     DateTime = date,
-                    HtmlContent = htmlContent
+                    Content = htmlContent
                 });
             }
             else
             {
                 // Если запись найдена, обновляем контент
-                dayRec.HtmlContent = htmlContent;
+                dayRec.Content = htmlContent;
                 _appDbContext.DayRecommendations.Update(dayRec);
             }
 

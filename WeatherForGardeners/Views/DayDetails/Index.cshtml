@@ -6,12 +6,13 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<div class="content-container">
-    <!-- Список задач -->
-    <div id="task-list-container">
-        <ul id="task-list">
-            @foreach (var task in Model.Tasks)
-            {
+<div class="content-wrapper">
+    <div class="content-container">
+        <!-- Список задач -->
+        <div id="task-list-container">
+            <ul id="task-list">
+                @foreach (var task in Model.Tasks)
+                {
                     <li>
                         <strong>@task.Title</strong>
                         <p>@task.Description</p>
@@ -21,20 +22,20 @@
                         </label>
                         <button class="edit-button" data-task-id="@task.Id" data-task-title="@task.Title" data-task-description="@task.Description">Редактировать</button>
                     </li>
-            }
-        </ul>
+                }
+            </ul>
 
-        <button id="save-button">Сохранить изменения</button>
-        <button id="add-task-button">Добавить задачу</button>
-    </div>
+            <button id="save-button">Сохранить изменения</button>
+            <button id="add-task-button">Добавить задачу</button>
+        </div>
 
-    <!-- HTML-содержимое -->
-    @if (!string.IsNullOrEmpty(Model.HtmlContent))
-    {
-                <div id="custom-html-content">
-            @Html.Raw(Model.HtmlContent)
+        @if (!string.IsNullOrEmpty(Model.Content))
+        {
+            <div id="custom-text-content">
+                @Model.Content
             </div>
-    }
+        }
+    </div>
 </div>
 
 <!-- Модальное окно -->
@@ -65,5 +66,5 @@
 }
 
 @section Styles {
-        <link rel="stylesheet" href="~/css/task-list.css?v=1.0" />
+    <link rel="stylesheet" href="~/css/task-list.css?v=1.0" />
 }
